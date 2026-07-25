@@ -10,10 +10,12 @@ public class EmployeeAddRequest
     // Profession | Hire Date | Establishment/Company ID 
     
     public Guid? CreatedBy  { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     // Personal Info
     public string? FullNameAr { get; set; }
     public string? FullNameEn { get; set; }
+    public string? BorderNumber {get; set;} // Non-Saudi
     public string? IqamaOrIdNumber {get; set;}
     public DateTime? IqamaOrIdExpiryDate {get; set;}
     public DateTime? DateOfBirth { get; set; }

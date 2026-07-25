@@ -31,7 +31,6 @@ public class Employee : BaseEntity
     public string? EmployeeStatus { get; set; }
     public DateTime? HireDate {get; set;}
     public DateTime? TerminationDate {get; set;}
-    public bool? IsTerminated { get; set; } = false;
     
     // FKs
      public Guid? EstablishmentId {get; set;}

@@ -14,6 +14,7 @@ public static class EmployeeExtensions
             FullNameAr = employeeAddRequest.FullNameAr,
             FullNameEn = employeeAddRequest.FullNameEn,
             IqamaOrIdNumber = employeeAddRequest.IqamaOrIdNumber,
+            BorderNumber = employeeAddRequest.BorderNumber,
             IqamaOrIdExpiryDate = employeeAddRequest.IqamaOrIdExpiryDate,
             DateOfBirth = employeeAddRequest.DateOfBirth,
             Gender = employeeAddRequest.Gender?.ToString(),
@@ -25,7 +26,8 @@ public static class EmployeeExtensions
             EstablishmentId = employeeAddRequest.EstablishmentId,
             CompanyId = employeeAddRequest.CompanyId,
             EmployeeStatus = employeeAddRequest.EmployeeStatus.ToString(),
-            CreatedBy = employeeAddRequest.CreatedBy
+            CreatedBy = employeeAddRequest.CreatedBy,
+            CreatedAt = employeeAddRequest.CreatedAt
         };
     }
     
@@ -59,7 +61,6 @@ public static class EmployeeExtensions
             ContractNumber = employee.ContractNumber,
             HireDate = employee.HireDate,
             EmployeeStatus = employee.EmployeeStatus?.ToString(),
-            IsTerminated =  employee.IsTerminated,
             TerminationDate = employee.TerminationDate,
             // est dto
             Establishment = employee.Establishment?.ToEstablishmentSummaryResponseObject(),
@@ -100,8 +101,7 @@ public static class EmployeeExtensions
             HireDate = employee.HireDate,
             EstablishmentCode = employee.Establishment?.EstablishmentCode,
             CompanyCode = employee.Company?.CompanyCode,
-            HasMemberPolicyNumber = !string.IsNullOrEmpty(employee.MemberPolicyNumber),
-            IsTerminated = employee.IsTerminated
+            HasMemberPolicyNumber = !string.IsNullOrEmpty(employee.MemberPolicyNumber)
         };
     }
 }
