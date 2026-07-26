@@ -3,8 +3,6 @@
 public class HealthInsuranceUpdateRequest
 {
     public Guid Id { get; set; }
-    public Guid? UpdatedBy { get; set; }
-    public DateTime UpdatedAt { get; set; }
     
     public string? PolicyNumber {get; set;}
     public string? InsuranceProvider {get; set;}

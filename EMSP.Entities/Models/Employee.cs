@@ -1,4 +1,6 @@
-﻿namespace EMSP.Entities.Models;
+﻿using EMSP.Entities.Enums;
+
+namespace EMSP.Entities.Models;
 
 public class Employee : BaseEntity
 {
@@ -10,7 +12,7 @@ public class Employee : BaseEntity
     public string? PassportNumber {get; set;} // Non-Saudi
     public string? BorderNumber {get; set;} // Non-Saudi
     public DateTime? DateOfBirth {get; set;}
-    public string? Gender {get; set;}
+    public GenderOptions? Gender {get; set;}
     public string? EmailAddress {get; set;}
     public string? PhoneNumber {get; set;}
     
@@ -28,7 +30,7 @@ public class Employee : BaseEntity
 
     public string? Profession {get; set;}
     public string? ContractNumber {get; set;}
-    public string? EmployeeStatus { get; set; }
+    public EmployeeStatus? Status { get; set; }
     public DateTime? HireDate {get; set;}
     public DateTime? TerminationDate {get; set;}
     

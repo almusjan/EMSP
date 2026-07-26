@@ -1,5 +1,5 @@
-﻿using EMSP.Entities.Models;
-using EMSP.ServiceContracts.DTOs.EmployeeCostDTOs;
+﻿using EMSP.ServiceContracts.DTOs.EmployeeCostDTOs;
+using EMSP.Entities.Models;
 
 namespace EMSP.ServiceContracts.Extensions;
 
@@ -11,7 +11,7 @@ public static class EmployeeCostExtensions
         return new EmployeeCost()
         {
             CostAmount = employeeCostAddRequest.CostAmount,
-            CostType = employeeCostAddRequest.CostType.ToString(),
+            CostType = employeeCostAddRequest.CostType,
             Description =  employeeCostAddRequest.Description,
             DueDate = employeeCostAddRequest.DueDate,
             EmployeeId = employeeCostAddRequest.EmployeeId,

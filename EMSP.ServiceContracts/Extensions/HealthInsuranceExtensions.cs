@@ -1,5 +1,5 @@
-﻿using EMSP.Entities.Models;
-using EMSP.ServiceContracts.DTOs.HealthInsuranceDTOs;
+﻿using EMSP.ServiceContracts.DTOs.HealthInsuranceDTOs;
+using EMSP.Entities.Models;
 
 namespace EMSP.ServiceContracts.Extensions;
 

@@ -1,5 +1,5 @@
-﻿using EMSP.Entities.Models;
-using EMSP.ServiceContracts.DTOs.SalaryDTOs;
+﻿using EMSP.ServiceContracts.DTOs.SalaryDTOs;
+using EMSP.Entities.Models;
 
 namespace EMSP.ServiceContracts.Extensions;
 
@@ -14,9 +14,14 @@ public static class SalaryExtensions
             HousingAllowance =  salaryAddRequest.HousingAllowance,
             OtherAllowance = salaryAddRequest.OtherAllowance,
             TransportationAllowance = salaryAddRequest.TransportationAllowance,
-            TotalSalary =  salaryAddRequest.BasicSalary + (salaryAddRequest.HousingAllowance ?? 0) + (salaryAddRequest.TransportationAllowance ?? 0) + (salaryAddRequest.OtherAllowance ?? 0),
             EmployeeId =  salaryAddRequest.EmployeeId
         };
+    }
+    // Calculate before saving
+    public static void CalculateTotalSalary (this Salary salary)
+    {
+        salary.TotalSalary = salary.BasicSalary + (salary.HousingAllowance ?? 0) +
+                             (salary.TransportationAllowance ?? 0) + (salary.OtherAllowance ?? 0);
     }
     
     // convert salary to response object

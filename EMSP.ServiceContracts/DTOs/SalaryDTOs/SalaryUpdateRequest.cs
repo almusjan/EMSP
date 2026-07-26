@@ -3,8 +3,6 @@
 public class SalaryUpdateRequest
 {
     public Guid Id {get; set;}
-    public Guid? UpdatedBy {get; set;}
-    public DateTime UpdatedAt {get; set;}
     
     public decimal BasicSalary {get; set;}
     public decimal? TransportationAllowance {get; set;}

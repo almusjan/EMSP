@@ -1,8 +1,10 @@
-﻿namespace EMSP.Entities.Models;
+﻿using EMSP.Entities.Enums;
+
+namespace EMSP.Entities.Models;
 
 public class EmployeeCost : BaseEntity
 {
-    public string? CostType {get; set;}
+    public CostType? CostType {get; set;}
     public string? Description {get; set;}
     public decimal CostAmount {get; set;}
     public DateTime? DueDate {get; set;}

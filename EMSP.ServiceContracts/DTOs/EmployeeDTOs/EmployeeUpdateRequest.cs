@@ -1,12 +1,10 @@
-﻿using EMSP.ServiceContracts.Enums;
+﻿using EMSP.Entities.Enums;
 
 namespace EMSP.ServiceContracts.DTOs.EmployeeDTOs;
 
 public class EmployeeUpdateRequest
 {
     public Guid Id { get; set; }
-    public Guid? UpdatedBy { get; set; }
-    public DateTime UpdatedAt { get; set; }
     
     // personal info
     public string? FullNameAr { get; set; }
@@ -15,7 +13,7 @@ public class EmployeeUpdateRequest
     public string? BorderNumber {get; set;} // Non-Saudi
     public DateTime? IqamaOrIdExpiryDate {get; set;}
     public DateTime? DateOfBirth {get; set;}
-    public string? Gender {get; set;}
+    public GenderOptions? Gender {get; set;}
     public string? EmailAddress {get; set;}
     public string? PhoneNumber {get; set;}
     public Guid? CountryId {get; set;}
@@ -26,7 +24,7 @@ public class EmployeeUpdateRequest
     public string? Profession {get; set;}
     public string? ContractNumber {get; set;}
     public DateTime? HireDate {get; set;}
-    public EmployeeStatus EmployeeStatus { get; set; }
+    public EmployeeStatus Status { get; set; }
     public DateTime? TerminationDate {get; set;}
     public Guid? EstablishmentId {get; set;}
     public Guid? CompanyId {get; set;}

@@ -3,8 +3,6 @@
 public class EstablishmentUpdateRequest
 {
     public Guid Id {get; set;}
-    public DateTime UpdatedAt {get; set;} = DateTime.UtcNow;
-    public Guid? UpdatedBy {get; set;}
     
     public string? EstablishmentNameAr { get; set; }
     public string? EstablishmentNameEn { get; set; }

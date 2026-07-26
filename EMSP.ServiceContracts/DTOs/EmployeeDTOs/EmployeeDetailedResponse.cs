@@ -1,4 +1,5 @@
-﻿using EMSP.ServiceContracts.DTOs.BankDTOs;
+﻿using EMSP.Entities.Enums;
+using EMSP.ServiceContracts.DTOs.BankDTOs;
 using EMSP.ServiceContracts.DTOs.CompanyDTOs;
 using EMSP.ServiceContracts.DTOs.CountryDTOs;
 using EMSP.ServiceContracts.DTOs.EmployeeCostDTOs;
@@ -28,7 +29,7 @@ public class EmployeeDetailedResponse
     public DateTime? IqamaOrIdExpiryDate {get; set;}
     public DateTime? PassportExpiryDate {get; set;}
     public DateTime? DateOfBirth { get; set; }
-    public string? Gender { get; set; }
+    public GenderOptions? Gender { get; set; }
     public string? EmailAddress {get; set;}
     public string? PhoneNumber { get; set; }
     
@@ -39,8 +40,7 @@ public class EmployeeDetailedResponse
     public string? Profession {get; set;}
     public string? ContractNumber {get; set;}
     public DateTime? HireDate {get; set;}
-    public string? EmployeeStatus { get; set; }
-    public bool? IsTerminated {get; set;}
+    public EmployeeStatus? Status { get; set; }
     public DateTime? TerminationDate {get; set;}
     // est. & company summary DTOs
     public EstablishmentSummaryResponse?  Establishment {get; set;}

@@ -2,8 +2,6 @@
 
 public class CountryAddRequest
 {
-    public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
-    
     public string? CountryNameAr {get; set;}
     public string? CountryNameEn {get; set;}
     public string? NationalityAr {get; set;}

@@ -1,6 +1,5 @@
-﻿using EMSP.Entities.Models;
-using EMSP.ServiceContracts.DTOs;
-using EMSP.ServiceContracts.DTOs.EmployeeDTOs;
+﻿using EMSP.ServiceContracts.DTOs.EmployeeDTOs;
+using EMSP.Entities.Models;
 
 namespace EMSP.ServiceContracts.Extensions;
 
@@ -17,7 +16,7 @@ public static class EmployeeExtensions
             BorderNumber = employeeAddRequest.BorderNumber,
             IqamaOrIdExpiryDate = employeeAddRequest.IqamaOrIdExpiryDate,
             DateOfBirth = employeeAddRequest.DateOfBirth,
-            Gender = employeeAddRequest.Gender?.ToString(),
+            Gender = employeeAddRequest.Gender,
             EmailAddress = employeeAddRequest.EmailAddress,
             PhoneNumber = employeeAddRequest.PhoneNumber,
             CountryId = employeeAddRequest.CountryId,
@@ -25,9 +24,7 @@ public static class EmployeeExtensions
             HireDate = employeeAddRequest.HireDate,
             EstablishmentId = employeeAddRequest.EstablishmentId,
             CompanyId = employeeAddRequest.CompanyId,
-            EmployeeStatus = employeeAddRequest.EmployeeStatus.ToString(),
-            CreatedBy = employeeAddRequest.CreatedBy,
-            CreatedAt = employeeAddRequest.CreatedAt
+            Status = employeeAddRequest.Status
         };
     }
     
@@ -60,7 +57,7 @@ public static class EmployeeExtensions
             Profession = employee.Profession,
             ContractNumber = employee.ContractNumber,
             HireDate = employee.HireDate,
-            EmployeeStatus = employee.EmployeeStatus?.ToString(),
+            Status = employee.Status,
             TerminationDate = employee.TerminationDate,
             // est dto
             Establishment = employee.Establishment?.ToEstablishmentSummaryResponseObject(),
@@ -94,6 +91,7 @@ public static class EmployeeExtensions
             FullNameAr = employee.FullNameAr,
             FullNameEn = employee.FullNameEn,
             IqamaOrIdNumber = employee.IqamaOrIdNumber,
+            Gender = employee.Gender,
             DateOfBirth = employee.DateOfBirth,
             PhoneNumber = employee.PhoneNumber,
             CountryCode = employee.Country?.CountryCode,

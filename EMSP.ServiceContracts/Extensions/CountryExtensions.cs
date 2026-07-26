@@ -1,5 +1,5 @@
-﻿using EMSP.Entities.Models;
-using EMSP.ServiceContracts.DTOs.CountryDTOs;
+﻿using EMSP.ServiceContracts.DTOs.CountryDTOs;
+using EMSP.Entities.Models;
 
 namespace EMSP.ServiceContracts.Extensions;
 

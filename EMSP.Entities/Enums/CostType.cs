@@ -1,4 +1,4 @@
-﻿namespace EMSP.ServiceContracts.Enums;
+﻿namespace EMSP.Entities.Enums;
 
 public enum CostType
 {
