@@ -13,8 +13,7 @@ public static class SalaryExtensions
             BasicSalary = salaryAddRequest.BasicSalary,
             HousingAllowance =  salaryAddRequest.HousingAllowance,
             OtherAllowance = salaryAddRequest.OtherAllowance,
-            TransportationAllowance = salaryAddRequest.TransportationAllowance,
-            EmployeeId =  salaryAddRequest.EmployeeId
+            TransportationAllowance = salaryAddRequest.TransportationAllowance
         };
     }
     // Calculate before saving
@@ -39,8 +38,7 @@ public static class SalaryExtensions
             HousingAllowance = salary.HousingAllowance,
             OtherAllowance = salary.OtherAllowance,
             TransportationAllowance = salary.TransportationAllowance,
-            TotalSalary = salary.TotalSalary,
-            EmployeeId = salary.EmployeeId
+            TotalSalary = salary.TotalSalary
         };
     }
 }

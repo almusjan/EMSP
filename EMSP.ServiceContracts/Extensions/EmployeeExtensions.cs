@@ -102,4 +102,18 @@ public static class EmployeeExtensions
             HasMemberPolicyNumber = !string.IsNullOrEmpty(employee.MemberPolicyNumber)
         };
     }
+    
+    // For TestLab Only
+    public static EmployeeUpdateRequest ToEmployeeUpdateRequest(this EmployeeSummaryResponse employeeSummaryResponse)
+    {
+        return new EmployeeUpdateRequest()
+        {
+            Id = employeeSummaryResponse.Id,
+            FullNameAr = employeeSummaryResponse.FullNameAr,
+            FullNameEn = employeeSummaryResponse.FullNameEn,
+            IqamaOrIdNumber =  employeeSummaryResponse.IqamaOrIdNumber,
+            Profession =  employeeSummaryResponse.Profession,
+            HireDate = employeeSummaryResponse.HireDate
+        };
+    }
 }

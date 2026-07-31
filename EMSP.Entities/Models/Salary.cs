@@ -1,4 +1,6 @@
-﻿namespace EMSP.Entities.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EMSP.Entities.Models;
 
 public class Salary : BaseEntity
 {
@@ -9,7 +11,4 @@ public class Salary : BaseEntity
     
     // Calculate in business logic
     public decimal TotalSalary {get; set;}
-    
-    public Guid? EmployeeId {get; set;}
-    public virtual Employee? Employee {get; set;}
 }

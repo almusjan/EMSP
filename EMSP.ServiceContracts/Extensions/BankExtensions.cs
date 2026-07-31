@@ -11,8 +11,7 @@ public static class BankExtensions
         return new Bank()
         {
             BankNameAr =  bankAddRequest.BankNameAr,
-            BankNameEn = bankAddRequest.BankNameEn,
-            BankCode =  bankAddRequest.BankCode
+            BankNameEn = bankAddRequest.BankNameEn
         };
     }
     
@@ -24,8 +23,7 @@ public static class BankExtensions
             Id =  bank.Id,
             CreatedAt =  bank.CreatedAt,
             BankNameAr = bank.BankNameAr,
-            BankNameEn = bank.BankNameEn,
-            BankCode = bank.BankCode
+            BankNameEn = bank.BankNameEn
         };
     }
 }

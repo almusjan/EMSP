@@ -24,4 +24,9 @@ public class EstablishmentService : IEstablishmentService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<bool> SoftDeleteEstablishment(Guid? establishmentId)
+    {
+        throw new NotImplementedException();
+    }
 }

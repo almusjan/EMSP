@@ -15,12 +15,17 @@ public class HealthInsuranceService : IHealthInsuranceService
         throw new NotImplementedException();
     }
 
-    public async Task<HealthInsuranceDetailedResponse?> GetHealthInsurance(Guid? healthInsuranceId)
+    public async Task<HealthInsuranceDetailedResponse?> GetHealthInsuranceById(Guid? healthInsuranceId)
     {
         throw new NotImplementedException();
     }
 
     public async Task<HealthInsuranceDetailedResponse> UpdateHealthInsurance(HealthInsuranceUpdateRequest? healthInsuranceUpdateRequest)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> SoftDeleteHealthInsurance(Guid? healthInsuranceId)
     {
         throw new NotImplementedException();
     }

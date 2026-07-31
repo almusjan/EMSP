@@ -3,5 +3,6 @@
 public enum EmployeeStatus
 {
     Active = 1,
-    Terminated = 2
+    Inactive = 2,
+    Terminated = 3
 }

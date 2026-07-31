@@ -17,8 +17,8 @@ public class EmployeeUpdateRequest
     public string? EmailAddress {get; set;}
     public string? PhoneNumber {get; set;}
     public Guid? CountryId {get; set;}
-    public DateTime? PassportExpiryDate {get; set;} // Non-Saudi
     public string? PassportNumber {get; set;} // Non-Saudi
+    public DateTime? PassportExpiryDate {get; set;} // Non-Saudi
     
     // employment info
     public string? Profession {get; set;}

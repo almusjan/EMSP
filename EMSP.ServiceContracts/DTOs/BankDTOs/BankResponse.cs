@@ -8,5 +8,4 @@ public class BankResponse
     
     public string? BankNameAr {get; set;}
     public string? BankNameEn {get; set;}
-    public string? BankCode {get; set;}
 }

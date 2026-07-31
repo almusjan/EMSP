@@ -5,22 +5,12 @@ namespace EMSP.Services;
 
 public class SalaryService : ISalaryService
 {
-    public async Task<List<SalaryResponse>> GetSalaries()
+    public async Task<SalaryResponse> AddSalary(Guid? employeeId, SalaryAddRequest? salaryAddRequest)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<SalaryResponse> AddSalary(SalaryAddRequest? salaryAddRequest)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<SalaryResponse?> GetSalary(Guid? salaryId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<SalaryResponse> UpdateSalary(SalaryUpdateRequest? salaryUpdateRequest)
+    public async Task<SalaryResponse> UpdateSalary(Guid? employeeId, SalaryUpdateRequest? salaryUpdateRequest)
     {
         throw new NotImplementedException();
     }

@@ -22,7 +22,7 @@ public class EmployeeAddRequest
     // Employment Info
     public string? Profession {get; set;}
     public DateTime? HireDate {get; set;}
-    public EmployeeStatus Status { get; set; } = EmployeeStatus.Active;
+    public EmployeeStatus Status { get; set; } = EmployeeStatus.Inactive;
     public Guid? EstablishmentId {get; set;}
     public Guid? CompanyId {get; set;}
 }

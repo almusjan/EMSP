@@ -1,16 +1,19 @@
-﻿using EMSP.ServiceContracts.DTOs.EmployeeDTOs;
+﻿using EMSP.Entities.Enums;
+using EMSP.ServiceContracts.DTOs.EmployeeDTOs;
 
 namespace EMSP.ServiceContracts.Interfaces;
 
 public interface IEmployeeService
 {
-    Task<List<EmployeeDetailedResponse>> GetEmployees();
+    Task<List<EmployeeSummaryResponse>> GetEmployees(EmployeeStatus? status = null);
+
+    Task<List<EmployeeSummaryResponse>> GetFilteredEmployees(string filterBy, string searchString); 
     
-    Task<EmployeeDetailedResponse> AddEmployee(EmployeeAddRequest? employeeAddRequest);
+    Task<EmployeeSummaryResponse> AddEmployee(EmployeeAddRequest? employeeAddRequest);
     
     Task<EmployeeDetailedResponse?> GetEmployeeById(Guid? employeeId);
     
-    Task<EmployeeDetailedResponse> UpdateEmployee(EmployeeUpdateRequest? employeeUpdateRequest);
+    Task<EmployeeSummaryResponse> UpdateEmployee(EmployeeUpdateRequest? employeeUpdateRequest);
     
-    // bool DeleteEmployee(Guid? employeeId);
+    Task<bool> SoftDeleteEmployee(Guid? employeeId);
 }

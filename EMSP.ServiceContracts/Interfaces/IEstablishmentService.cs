@@ -12,5 +12,5 @@ public interface IEstablishmentService
     
     Task<EstablishmentDetailedResponse> UpdateEstablishment(EstablishmentUpdateRequest? establishmentUpdateRequest);
     
-    // bool  DeleteEstablishment(Guid? establishmentId);
+    Task<bool> SoftDeleteEstablishment(Guid? establishmentId);
 }

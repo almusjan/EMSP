@@ -17,4 +17,27 @@ public class EmployeeSummaryResponse
     public string? EstablishmentCode { get; set; }
     public string? CompanyCode { get; set; }
     public bool? HasMemberPolicyNumber {get; set;}
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(EmployeeSummaryResponse))
+            return false;
+        
+        EmployeeSummaryResponse otherResponse = (EmployeeSummaryResponse)obj;
+        
+        return Id ==  otherResponse.Id && IqamaOrIdNumber == otherResponse.IqamaOrIdNumber;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"{IqamaOrIdNumber} - {FullNameEn}|{FullNameAr}";
+    }
 }

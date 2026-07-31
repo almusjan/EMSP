@@ -4,13 +4,13 @@ namespace EMSP.ServiceContracts.Interfaces;
 
 public interface ICompanyService
 {
-    Task<List<CompanyDetailedResponse>> GetCompanies();
+    Task<List<CompanySummaryResponse>> GetCompanies();
     
-    Task<CompanyDetailedResponse> AddCompany(CompanyAddRequest? companyAddRequest);
+    Task<CompanySummaryResponse> AddCompany(CompanyAddRequest? companyAddRequest);
     
     Task<CompanyDetailedResponse?> GetCompanyById(Guid? companyId);
     
-    Task<CompanyDetailedResponse> UpdateCompany(CompanyUpdateRequest? companyUpdateRequest);
+    Task<CompanySummaryResponse> UpdateCompany(CompanyUpdateRequest? companyUpdateRequest);
     
-    //bool DeleteCompany(Guid? companyId);
+    Task<bool> SoftDeleteCompany(Guid? companyId);
 }

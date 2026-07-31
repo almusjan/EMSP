@@ -8,9 +8,9 @@ public interface IHealthInsuranceService
     
     Task<HealthInsuranceDetailedResponse> AddHealthInsurance(HealthInsuranceAddRequest? healthInsuranceAddRequest);
     
-    Task<HealthInsuranceDetailedResponse?> GetHealthInsurance(Guid? healthInsuranceId);
+    Task<HealthInsuranceDetailedResponse?> GetHealthInsuranceById(Guid? healthInsuranceId);
     
     Task<HealthInsuranceDetailedResponse> UpdateHealthInsurance(HealthInsuranceUpdateRequest? healthInsuranceUpdateRequest);
     
-    // bool DeleteHealthInsurance(Guid? healthInsuranceId);
+    Task<bool> SoftDeleteHealthInsurance(Guid? healthInsuranceId);
 }
