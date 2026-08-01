@@ -12,12 +12,6 @@ public class HealthInsuranceRepository : IHealthInsuranceRepository
     {
         _dbContext = dbContext;
     }
-
-    private IQueryable<HealthInsurance> GetBaseQuery()
-    {
-        return _dbContext.HealthInsurances.Include(hi => hi.Establishment)
-            .Include(hi => hi.Employees);
-    }
     
     public async Task<HealthInsurance> AddAsync(HealthInsurance healthInsurance)
     {
@@ -32,35 +26,24 @@ public class HealthInsuranceRepository : IHealthInsuranceRepository
 
     public async Task<List<HealthInsurance>> GetAllAsync()
     {
-        return await GetBaseQuery().ToListAsync();
+        return await _dbContext.HealthInsurances.ToListAsync();
     }
 
     public async Task<HealthInsurance?> GetByIdAsync(Guid? healthInsuranceId)
     {
-        return await GetBaseQuery().FirstOrDefaultAsync(hi => hi.Id == healthInsuranceId);
+        return await _dbContext.HealthInsurances
+            .Include(hi => hi.Establishment)
+            .Include(hi => hi.Employees)
+            .FirstOrDefaultAsync(hi => hi.Id == healthInsuranceId);
     }
 
     public async Task<HealthInsurance> UpdateAsync(HealthInsurance healthInsurance)
     {
-        HealthInsurance? matchingHealthInsurance =
-            await GetBaseQuery().FirstOrDefaultAsync(hi => hi.Id == healthInsurance.Id);
-
-        if (matchingHealthInsurance == null)
-            return healthInsurance;
-
-        #region CheckingUpdateFields
-
-        matchingHealthInsurance.UpdatedAt = DateTime.UtcNow;
-        
-        matchingHealthInsurance.PolicyExpiryDate = healthInsurance.PolicyExpiryDate;
-        matchingHealthInsurance.PolicyNumber = healthInsurance.PolicyNumber;
-        matchingHealthInsurance.InsuranceProvider = healthInsurance.InsuranceProvider;
-        matchingHealthInsurance.EstablishmentId = healthInsurance.EstablishmentId;
-
-        #endregion
+        _dbContext.HealthInsurances.Update(healthInsurance);
+        _dbContext.Entry(healthInsurance).Property(hi => hi.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync();
         
-        return matchingHealthInsurance;
+        return healthInsurance;
     }
 }

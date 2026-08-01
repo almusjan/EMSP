@@ -47,7 +47,7 @@ public class EmployeeService : IEmployeeService
         ValidationHelper.ModelValidation(employeeAddRequest);
 
         if (employeeAddRequest.IqamaOrIdNumber != null && await _employeeRepository.IsIqamaExistsAsync(employeeAddRequest.IqamaOrIdNumber))
-            throw new InvalidOperationException($"Employee with {employeeAddRequest.IqamaOrIdNumber} already exists");
+            throw new InvalidOperationException($"Employee with Iqama {employeeAddRequest.IqamaOrIdNumber} already exists");
         
         Employee employee = employeeAddRequest.ToEmployeeObject();
 
@@ -82,7 +82,7 @@ public class EmployeeService : IEmployeeService
         Employee? matchingEmployee = await _employeeRepository.GetByIdAsync(employeeUpdateRequest.Id);
         
         if(matchingEmployee == null)
-            throw new KeyNotFoundException($"Employee with id {employeeUpdateRequest.Id} not found");
+            throw new KeyNotFoundException($"Employee with ID {employeeUpdateRequest.Id} not found");
 
         #region CheckingUpdateFields
         
@@ -128,25 +128,23 @@ public class EmployeeService : IEmployeeService
         return  matchingEmployee.ToEmployeeSummaryResponseObject();
     }
 
-    public async Task<bool> SoftDeleteEmployee(Guid? employeeId)
+    public async Task SoftDeleteEmployee(Guid employeeId)
     {
-        if (employeeId == null)
-            return false;
-
         Employee? matchingEmployee = await _employeeRepository.GetByIdAsync(employeeId);
 
         // not sure
         if (matchingEmployee == null)
-            return false;
+            throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+
+        if (matchingEmployee.IsDeleted)
+            throw new InvalidOperationException("The employee is already soft-deleted");
         
         if (matchingEmployee.Status == EmployeeStatus.Active)
-            throw new InvalidOperationException("Cannot soft-delete an active employee.");
+            throw new InvalidOperationException("Cannot soft-delete an active employee. Terminate him first.");
 
         matchingEmployee.IsDeleted = true;
 
         await _employeeRepository.UpdateAsync(matchingEmployee);
-        
-        return true;
     }
     
     // I may add 2 more methods - get soft deleted list - hard delete for employee who was terminated for at least 3 months

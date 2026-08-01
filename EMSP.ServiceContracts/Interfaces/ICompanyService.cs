@@ -12,5 +12,5 @@ public interface ICompanyService
     
     Task<CompanySummaryResponse> UpdateCompany(CompanyUpdateRequest? companyUpdateRequest);
     
-    Task<bool> SoftDeleteCompany(Guid? companyId);
+    Task SoftDeleteCompany(Guid companyId);
 }

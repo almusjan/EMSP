@@ -63,7 +63,7 @@ public class CompanyService : ICompanyService
         Company?  matchingCompany = await _companyRepository.GetByIdAsync(companyUpdateRequest.Id);
 
         if (matchingCompany == null)
-            throw new KeyNotFoundException($"Company with id {companyUpdateRequest.Id} not found!");
+            throw new KeyNotFoundException($"Company with ID {companyUpdateRequest.Id} not found!");
         
         #region CheckingUpdateFields
 
@@ -86,21 +86,19 @@ public class CompanyService : ICompanyService
         return matchingCompany.ToCompanySummaryResponseObject();
     }
 
-    public async Task<bool> SoftDeleteCompany(Guid? companyId)
+    public async Task SoftDeleteCompany(Guid companyId)
     {
-        if (companyId == null)
-            return false;
-
-        Company? matchingCompany = await _companyRepository.GetByIdAsync(companyId.Value);
+        Company? matchingCompany = await _companyRepository.GetByIdAsync(companyId);
 
         if (matchingCompany == null)
-            return false;
+            throw new  KeyNotFoundException($"Company with ID {companyId} not found!");
+        
+        if(matchingCompany.IsDeleted)
+            throw new InvalidOperationException("Company is already soft-deleted!");
         
         matchingCompany.IsDeleted = true;
         
         await _companyRepository.UpdateAsync(matchingCompany);
-
-        return true;
     }
     // I may add 2 more methods - get soft deleted list - hard delete for companies who was hidden for some time
 }

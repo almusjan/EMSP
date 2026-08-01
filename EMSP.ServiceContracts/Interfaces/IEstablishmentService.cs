@@ -4,13 +4,13 @@ namespace EMSP.ServiceContracts.Interfaces;
 
 public interface IEstablishmentService
 {
-    Task<List<EstablishmentDetailedResponse>> GetEstablishments();
+    Task<List<EstablishmentSummaryResponse>> GetEstablishments();
     
-    Task<EstablishmentDetailedResponse> AddEstablishment(EstablishmentAddRequest? establishmentAddRequest);
+    Task<EstablishmentSummaryResponse> AddEstablishment(EstablishmentAddRequest? establishmentAddRequest);
     
     Task<EstablishmentDetailedResponse?>  GetEstablishmentById(Guid? establishmentId);
     
-    Task<EstablishmentDetailedResponse> UpdateEstablishment(EstablishmentUpdateRequest? establishmentUpdateRequest);
+    Task<EstablishmentSummaryResponse> UpdateEstablishment(EstablishmentUpdateRequest? establishmentUpdateRequest);
     
-    Task<bool> SoftDeleteEstablishment(Guid? establishmentId);
+    Task SoftDeleteEstablishment(Guid establishmentId);
 }

@@ -29,27 +29,11 @@ public class EmployeeCostRepository : IEmployeeCostRepository
 
     public async Task<EmployeeCost> UpdateAsync(EmployeeCost employeeCost)
     {
-        EmployeeCost? matchingEmployeeCost = await _dbContext.EmployeeCosts.FirstOrDefaultAsync(ec => ec.Id == employeeCost.Id);
-
-        if (matchingEmployeeCost == null)
-            return employeeCost;
-
-        #region CheckingUpdateFields
-
-        matchingEmployeeCost.UpdatedAt = DateTime.UtcNow;
-        
-        matchingEmployeeCost.CostType =  employeeCost.CostType;
-        matchingEmployeeCost.Description =  employeeCost.Description;
-        matchingEmployeeCost.CostAmount = employeeCost.CostAmount;
-        matchingEmployeeCost.DueDate = employeeCost.DueDate;
-        matchingEmployeeCost.IsPaid = employeeCost.IsPaid;
-        matchingEmployeeCost.PaidDate = employeeCost.PaidDate;
-        matchingEmployeeCost.ReferenceNumber = employeeCost.ReferenceNumber;
-
-        #endregion
+        _dbContext.EmployeeCosts.Update(employeeCost);
+        _dbContext.Entry(employeeCost).Property(ec => ec.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await  _dbContext.SaveChangesAsync();
         
-        return matchingEmployeeCost;
+        return employeeCost;
     }
 }

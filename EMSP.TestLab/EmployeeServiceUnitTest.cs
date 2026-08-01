@@ -389,35 +389,79 @@ public class EmployeeServiceUnitTest
     #region SoftDeleteEmployee
 
     [Fact]
-    public async Task SoftDeleteEmployee_NullEmployeeId_ReturnsFalse()
+    public async Task SoftDeleteEmployee_NullEmployee_ThrowsKeyNotFoundException()
     {
         // Arrange
-        Guid? id = null;
-        
-        // Act
-        bool isDeleted = await _employeeService.SoftDeleteEmployee(id);
-        
-        // Assert
-        isDeleted.Should().BeFalse();
-    }
-
-    [Fact]
-    public async Task SoftDeleteEmployee_ProperEmployeeId_Successful()
-    {
-        // Arrange
-        Employee employee = _fixture.Build<Employee>().With(e => e.Country, null as Country)
+        Employee employee = _fixture.Build<Employee>()
+            .With(e => e.Country, null as Country)
+            .With(e => e.Company, null as Company)
             .With(e => e.Establishment, null as Establishment)
-            .With(e => e.Company, null as Company).With(e => e.Salary, null as Salary)
-            .With(e => e.Bank, null as Bank).With(e => e.HealthInsurance, null as HealthInsurance)
+            .With(e => e.Bank, null as Bank)
+            .With(e => e.Salary, null as Salary)
+            .With(e => e.HealthInsurance, null as HealthInsurance)
             .With(e => e.EmployeeCosts, null as List<EmployeeCost>)
             .Create();
         
         // Act
-        await _employeeService.SoftDeleteEmployee(employee.Id);
-        employee.IsDeleted = true;
+        Func<Task> action = async () =>
+        {
+            await _employeeService.SoftDeleteEmployee(employee.Id);
+        };
         
         // Assert
-        employee.IsDeleted.Should().BeTrue();
+        await action.Should().ThrowAsync<KeyNotFoundException>();
+    }
+
+    [Fact]
+    public async Task SoftDeleteEmployee_EmployeeSoftDeleted_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        Employee employee = _fixture.Build<Employee>()
+            .With(e => e.Status, EmployeeStatus.Terminated)
+            .With(e => e.TerminationDate, DateTime.UtcNow)
+            .With(e => e.IsDeleted, true)
+            .With(e => e.Country, null as Country)
+            .With(e => e.Company, null as Company)
+            .With(e => e.Establishment, null as Establishment)
+            .With(e => e.Bank, null as Bank)
+            .With(e => e.Salary, null as Salary)
+            .With(e => e.HealthInsurance, null as HealthInsurance)
+            .With(e => e.EmployeeCosts, null as List<EmployeeCost>)
+            .Create();
+        
+        // Act
+        Func<Task> action = async () =>
+        {
+            await _employeeService.SoftDeleteEmployee(employee.Id);
+        };
+        
+        // Assert
+        await action.Should().ThrowAsync<KeyNotFoundException>();
+    }
+    
+    [Fact]
+    public async Task SoftDeleteEmployee_EmployeeIsActive_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        Employee employee = _fixture.Build<Employee>()
+            .With(e => e.Status, EmployeeStatus.Active)
+            .With(e => e.Country, null as Country)
+            .With(e => e.Company, null as Company)
+            .With(e => e.Establishment, null as Establishment)
+            .With(e => e.Bank, null as Bank)
+            .With(e => e.Salary, null as Salary)
+            .With(e => e.HealthInsurance, null as HealthInsurance)
+            .With(e => e.EmployeeCosts, null as List<EmployeeCost>)
+            .Create();
+        
+        // Act
+        Func<Task> action = async () =>
+        {
+            await _employeeService.SoftDeleteEmployee(employee.Id);
+        };
+        
+        // Assert
+        await action.Should().ThrowAsync<KeyNotFoundException>();
     }
 
     #endregion 

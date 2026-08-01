@@ -4,13 +4,14 @@ namespace EMSP.ServiceContracts.Interfaces;
 
 public interface IHealthInsuranceService
 {
-    Task<List<HealthInsuranceDetailedResponse>> GetHealthInsurances();
+    Task<List<HealthInsuranceSummaryResponse>> GetHealthInsurances();
     
-    Task<HealthInsuranceDetailedResponse> AddHealthInsurance(HealthInsuranceAddRequest? healthInsuranceAddRequest);
+    Task<HealthInsuranceSummaryResponse> AddHealthInsurance(HealthInsuranceAddRequest? healthInsuranceAddRequest);
     
     Task<HealthInsuranceDetailedResponse?> GetHealthInsuranceById(Guid? healthInsuranceId);
     
-    Task<HealthInsuranceDetailedResponse> UpdateHealthInsurance(HealthInsuranceUpdateRequest? healthInsuranceUpdateRequest);
+    Task<HealthInsuranceSummaryResponse> UpdateHealthInsurance(
+        HealthInsuranceUpdateRequest? healthInsuranceUpdateRequest);
     
-    Task<bool> SoftDeleteHealthInsurance(Guid? healthInsuranceId);
+    Task SoftDeleteHealthInsurance(Guid healthInsuranceId);
 }

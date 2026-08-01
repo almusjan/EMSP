@@ -15,5 +15,5 @@ public interface IEmployeeService
     
     Task<EmployeeSummaryResponse> UpdateEmployee(EmployeeUpdateRequest? employeeUpdateRequest);
     
-    Task<bool> SoftDeleteEmployee(Guid? employeeId);
+    Task SoftDeleteEmployee(Guid employeeId);
 }

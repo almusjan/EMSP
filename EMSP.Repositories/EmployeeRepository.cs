@@ -16,28 +16,31 @@ public class EmployeeRepository : IEmployeeRepository
         _dbContext = dbContext;
     }
 
-    private IQueryable<Employee> GetBaseQuery()
+    private IQueryable<Employee> GetQueryableEmployee()
     {
         return _dbContext.Employees
-            .Include(e => e.Country)
             .Include(e => e.Establishment)
-            .Include(e => e.Company)
-            .Include(e => e.HealthInsurance)
-            .Include(e => e.Salary)
-            .Include(e => e.Bank)
-            .Include(e => e.EmployeeCosts);
+            .Include(e => e.Company);
     }
     
     public async Task<List<Employee>> GetAllAsync() =>
-        await GetBaseQuery().ToListAsync();
+        await GetQueryableEmployee().ToListAsync();
 
     public async Task<List<Employee>> GetFilteredAsync(Expression<Func<Employee, bool>> predicate) =>
-        await GetBaseQuery().Where(predicate).ToListAsync();
+        await GetQueryableEmployee().Where(predicate).ToListAsync();
 
-    public async Task<Employee?> GetByIdAsync(Guid? employeeId) =>
-        await GetBaseQuery().FirstOrDefaultAsync(e => e.Id == employeeId);
-    
-    
+    public async Task<Employee?> GetByIdAsync(Guid? employeeId)
+    {
+        return await GetQueryableEmployee()
+            .Include(e => e.Country)
+            .Include(e => e.HealthInsurance)
+            .Include(e => e.Salary)
+            .Include(e => e.Bank)
+            .Include(e => e.EmployeeCosts)
+            .FirstOrDefaultAsync(e => e.Id == employeeId);
+    }
+
+
     public async Task<bool> IsIqamaExistsAsync(string iqamaOrIdNumber) =>
         await _dbContext.Employees.AnyAsync(e => e.IqamaOrIdNumber == iqamaOrIdNumber);
 
@@ -54,54 +57,11 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<Employee> UpdateAsync(Employee employee)
     {
-        Employee? matchingEmployee = await GetBaseQuery().FirstOrDefaultAsync(e => e.Id == employee.Id);
-
-        if (matchingEmployee == null)
-            return employee;
-
-        #region CheckingUpdateFields
-        
-        matchingEmployee.UpdatedAt = DateTime.UtcNow;
-        
-        matchingEmployee.FullNameAr = employee.FullNameAr;
-        matchingEmployee.FullNameEn = employee.FullNameEn;
-        matchingEmployee.IqamaOrIdNumber = employee.IqamaOrIdNumber;
-        matchingEmployee.IqamaOrIdExpiryDate = employee.IqamaOrIdExpiryDate;
-        matchingEmployee.DateOfBirth = employee.DateOfBirth;
-        matchingEmployee.Gender =  employee.Gender;
-        matchingEmployee.EmailAddress = employee.EmailAddress;
-        matchingEmployee.PhoneNumber =  employee.PhoneNumber;
-        matchingEmployee.CountryId = employee.CountryId; // nearly impossible Updated 0.0001%
-        matchingEmployee.PassportNumber = employee.PassportNumber;
-        matchingEmployee.PassportExpiryDate =  employee.PassportExpiryDate;
-        
-        if(!string.IsNullOrEmpty(employee.BorderNumber))
-            matchingEmployee.BorderNumber = employee.BorderNumber;
-        
-        matchingEmployee.Profession =   employee.Profession;
-        matchingEmployee.ContractNumber = employee.ContractNumber;
-        matchingEmployee.HireDate = employee.HireDate;
-        matchingEmployee.Status = employee.Status;
-        matchingEmployee.EstablishmentId =  employee.EstablishmentId;
-        matchingEmployee.CompanyId = employee.CompanyId;
-        
-        if (employee.Status == EmployeeStatus.Terminated)
-            matchingEmployee.TerminationDate = employee.TerminationDate;
-
-        matchingEmployee.Iban = employee.Iban;
-        matchingEmployee.BankId = employee.BankId;
-        matchingEmployee.UnlistedBankName = employee.UnlistedBankName;
-        if(!string.IsNullOrEmpty(employee.AccountNumber))
-            matchingEmployee.AccountNumber = employee.AccountNumber;
-        
-        matchingEmployee.HealthInsuranceId = employee.HealthInsuranceId;
-        if(employee.HealthInsuranceId != Guid.Empty)
-            matchingEmployee.MemberPolicyNumber = employee.MemberPolicyNumber;
-
-        #endregion
+        _dbContext.Employees.Update(employee);
+        _dbContext.Entry(employee).Property(e => e.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync();
-
-        return matchingEmployee;
+        
+        return employee;
     }
 }

@@ -24,26 +24,18 @@ public class SalaryRepository : ISalaryRepository
         return salary;
     }
 
+    public Task<Salary?> GetByIdAsync(Guid? salaryId)
+    {
+        return _dbContext.Salaries.FirstOrDefaultAsync(s => s.Id == salaryId);
+    }
+
     public async Task<Salary> UpdateAsync(Salary salary)
     {
-        Salary? matchingSalary = await _dbContext.Salaries.FirstOrDefaultAsync(s => s.Id == salary.Id);
-
-        if (matchingSalary == null)
-            return salary;
-        
-        #region CheckingUpdateFields
-
-        matchingSalary.UpdatedAt = DateTime.UtcNow;
-        
-        matchingSalary.BasicSalary  = salary.BasicSalary;
-        matchingSalary.HousingAllowance  = salary.HousingAllowance;
-        matchingSalary.OtherAllowance =  salary.OtherAllowance;
-        matchingSalary.TransportationAllowance = salary.TransportationAllowance;
-
-        #endregion
+        _dbContext.Salaries.Update(salary);
+        _dbContext.Entry(salary).Property(s => s.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync();
         
-        return matchingSalary;
+        return salary;
     }
 }

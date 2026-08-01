@@ -12,13 +12,6 @@ public class EstablishmentRepository : IEstablishmentRepository
     {
         _dbContext = dbContext;
     }
-
-    private IQueryable<Establishment> GetBaseQuery()
-    {
-        return _dbContext.Establishments.Include(e => e.Companies)
-            .Include(e => e.Employees)
-            .Include(e => e.HealthInsurances);
-    }
     
     public async Task<Establishment> AddAsync(Establishment establishment)
     {
@@ -33,39 +26,25 @@ public class EstablishmentRepository : IEstablishmentRepository
 
     public async Task<List<Establishment>> GetAllAsync()
     {
-        return await GetBaseQuery().ToListAsync();
+        return await _dbContext.Establishments.ToListAsync();
     }
 
     public async Task<Establishment?> GetByIdAsync(Guid? establishmentId)
     {
-        return await GetBaseQuery().FirstOrDefaultAsync(e => e.Id == establishmentId);
+        return await _dbContext.Establishments
+            .Include(e => e.Companies)
+            .Include(e => e.Employees)
+            .Include(e => e.HealthInsurances)
+            .FirstOrDefaultAsync(e => e.Id == establishmentId);
     }
 
     public async Task<Establishment> UpdateAsync(Establishment establishment)
     {
-        Establishment? matchingEstablishment = await GetBaseQuery().FirstOrDefaultAsync(e => e.Id == establishment.Id);
-
-        if (matchingEstablishment == null)
-            return establishment;
-
-        #region CheckingUpdateFields
-        
-        matchingEstablishment.UpdatedAt = DateTime.UtcNow;
-
-        matchingEstablishment.EstablishmentNameAr =  establishment.EstablishmentNameAr;
-        matchingEstablishment.EstablishmentNameEn = establishment.EstablishmentNameEn;
-        matchingEstablishment.EstablishmentCode =  establishment.EstablishmentCode;
-        matchingEstablishment.EstablishmentType = establishment.EstablishmentType;
-        matchingEstablishment.NationalId =  establishment.NationalId;
-        matchingEstablishment.CommercialRegistrationNumber =  establishment.CommercialRegistrationNumber;
-        matchingEstablishment.ShortAddress =  establishment.ShortAddress;
-        matchingEstablishment.FullAddress  =  establishment.FullAddress;
-        matchingEstablishment.VatNumber =   establishment.VatNumber;
-
-        #endregion
+        _dbContext.Establishments.Update(establishment);
+        _dbContext.Entry(establishment).Property(e => e.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync();
         
-        return matchingEstablishment;
+        return establishment;
     }
 }

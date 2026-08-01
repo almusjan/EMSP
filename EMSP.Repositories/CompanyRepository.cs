@@ -12,18 +12,17 @@ public class CompanyRepository : ICompanyRepository
     {
         _dbContext = dbContext;
     }
-
-    private IQueryable<Company> GetBaseQuery()
-    {
-        return _dbContext.Companies.Include(e => e.Employees)
-            .Include(e => e.Establishment);
-    }
     
     public async Task<List<Company>> GetAllAsync() => 
-        await GetBaseQuery().ToListAsync();
+        await _dbContext.Companies.ToListAsync();
 
-    public async Task<Company?> GetByIdAsync(Guid companyId) =>
-        await GetBaseQuery().FirstOrDefaultAsync(e => e.Id == companyId);
+    public async Task<Company?> GetByIdAsync(Guid companyId)
+    {
+        return await _dbContext.Companies
+            .Include(c => c.Employees)
+            .Include(c => c.Establishment)
+            .FirstOrDefaultAsync(e => e.Id == companyId);
+    }
 
     public async Task<Company> AddAsync(Company company)
     {
@@ -38,29 +37,11 @@ public class CompanyRepository : ICompanyRepository
 
     public async Task<Company> UpdateAsync(Company company)
     {
-        Company? matchingCompany = await GetBaseQuery().FirstOrDefaultAsync(c => c.Id == company.Id);
-
-        if (matchingCompany == null)
-            return company;
-
-        #region CheckingUpdateFields
-
-        matchingCompany.UpdatedAt = DateTime.UtcNow;
-        
-        matchingCompany.CompanyNameAr = company.CompanyNameAr;
-        matchingCompany.CompanyNameEn = company.CompanyNameEn;
-        matchingCompany.CompanyCode =  company.CompanyCode;
-        matchingCompany.ShortAddress = company.ShortAddress;
-        matchingCompany.FullAddress =  company.FullAddress;
-        matchingCompany.ContactNumber = company.ContactNumber;
-        matchingCompany.Email = company.Email;
-        matchingCompany.VatNumber = company.VatNumber;
-        matchingCompany.EstablishmentId = company.EstablishmentId;
-
-        #endregion
+        _dbContext.Companies.Update(company);
+        _dbContext.Entry(company).Property(c => c.UpdatedAt).CurrentValue = DateTime.UtcNow;
         
         await _dbContext.SaveChangesAsync();
         
-        return matchingCompany;
+        return company;
     }
 }

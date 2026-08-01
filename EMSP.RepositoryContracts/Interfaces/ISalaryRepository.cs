@@ -6,5 +6,7 @@ public interface ISalaryRepository
 {
     Task<Salary> AddAsync(Salary salary);
     
+    Task<Salary?> GetByIdAsync(Guid? salaryId);
+    
     Task<Salary> UpdateAsync(Salary salary);
 }

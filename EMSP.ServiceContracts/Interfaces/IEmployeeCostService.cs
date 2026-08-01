@@ -10,5 +10,5 @@ public interface IEmployeeCostService
     
     Task<EmployeeCostResponse> UpdateEmployeeCost(EmployeeCostUpdateRequest? employeeCostUpdateRequest);
     
-    Task<bool> SoftDeleteEmployeeCost(Guid? employeeCostId);
+    Task SoftDeleteEmployeeCost(Guid employeeCostId);
 }
