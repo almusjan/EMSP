@@ -17,4 +17,27 @@ public class EmployeeCostResponse
     public bool IsPaid {get; set;}
     public DateTime? PaidDate {get; set;}
     public string? ReferenceNumber {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(EmployeeCostResponse))
+            return false;
+        
+        EmployeeCostResponse otherResponse = (EmployeeCostResponse)obj;
+        
+        return Id ==  otherResponse.Id && ReferenceNumber == otherResponse.ReferenceNumber;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"[{CostType.ToString()}] {ReferenceNumber} - {CostAmount}$ ";
+    }
 }

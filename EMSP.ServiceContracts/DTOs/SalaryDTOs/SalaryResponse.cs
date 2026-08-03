@@ -13,4 +13,27 @@ public class SalaryResponse
     public decimal? HousingAllowance {get; set;}
     public decimal? OtherAllowance {get; set;}
     public decimal TotalSalary {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(SalaryResponse))
+            return false;
+        
+        SalaryResponse otherResponse = (SalaryResponse)obj;
+        
+        return Id ==  otherResponse.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"{BasicSalary} / {HousingAllowance} | {TransportationAllowance} | {OtherAllowance} \\ | {TotalSalary}";
+    }
 }

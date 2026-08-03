@@ -11,4 +11,27 @@ public class CountryResponse
     public string? NationalityAr {get; set;}
     public string? NationalityEn {get; set;}
     public string? CountryCode {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(CountryResponse))
+            return false;
+        
+        CountryResponse otherResponse = (CountryResponse)obj;
+        
+        return Id ==  otherResponse.Id && CountryCode == otherResponse.CountryCode;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"[{CountryCode}] {CountryNameEn}|{CountryNameAr}";
+    }
 }

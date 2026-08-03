@@ -25,4 +25,27 @@ public class CompanyDetailedResponse
     
     // list of employees dto
     public List<EmployeeSummaryResponse>? Employees {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(CompanyDetailedResponse))
+            return false;
+        
+        CompanyDetailedResponse otherResponse = (CompanyDetailedResponse)obj;
+        
+        return Id ==  otherResponse.Id && CompanyCode == otherResponse.CompanyCode;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"[{CompanyCode}] {CompanyNameEn}|{CompanyNameAr}";
+    }
 }

@@ -85,6 +85,6 @@ public class EmployeeDetailedResponse
 
     public override string ToString()
     {
-        return $"{IqamaOrIdNumber} - {FullNameEn}|{FullNameAr}";
+        return $"[{IqamaOrIdNumber}] {FullNameEn}|{FullNameAr}";
     }
 }

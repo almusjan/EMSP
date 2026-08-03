@@ -20,4 +20,27 @@ public class HealthInsuranceDetailedResponse
     
     // list of employees dto
     public List<EmployeeSummaryResponse>? Employees {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(HealthInsuranceDetailedResponse))
+            return false;
+        
+        HealthInsuranceDetailedResponse otherResponse = (HealthInsuranceDetailedResponse)obj;
+        
+        return Id ==  otherResponse.Id && PolicyNumber == otherResponse.PolicyNumber && Establishment == otherResponse.Establishment;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"[{Establishment?.EstablishmentCode}] {InsuranceProvider}|{PolicyNumber}";
+    }
 }

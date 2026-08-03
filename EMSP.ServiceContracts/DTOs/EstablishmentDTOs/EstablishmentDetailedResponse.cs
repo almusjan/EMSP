@@ -28,4 +28,27 @@ public class EstablishmentDetailedResponse
     public List<CompanySummaryResponse>?  Companies {get; set;}
     // list of health insurances dto
     public List<HealthInsuranceSummaryResponse>?  HealthInsurances {get; set;}
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj == null)
+            return false;
+        
+        if(obj.GetType() != typeof(EstablishmentDetailedResponse))
+            return false;
+        
+        EstablishmentDetailedResponse otherResponse = (EstablishmentDetailedResponse)obj;
+        
+        return Id ==  otherResponse.Id && NationalId == otherResponse.NationalId;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    
+    public override string ToString()
+    {
+        return $"[{NationalId}] {EstablishmentNameEn}|{EstablishmentNameAr}";
+    }
 }

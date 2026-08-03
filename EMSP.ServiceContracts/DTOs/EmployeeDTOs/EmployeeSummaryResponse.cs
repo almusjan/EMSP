@@ -38,6 +38,6 @@ public class EmployeeSummaryResponse
     
     public override string ToString()
     {
-        return $"{IqamaOrIdNumber} - {FullNameEn}|{FullNameAr}";
+        return $"[{IqamaOrIdNumber}] {FullNameEn}|{FullNameAr}";
     }
 }
