@@ -22,11 +22,8 @@ public class EmployeeRepository : IEmployeeRepository
             .Include(e => e.Establishment)
             .Include(e => e.Company);
     }
-    
-    public async Task<List<Employee>> GetAllAsync() =>
-        await GetQueryableEmployee().ToListAsync();
 
-    public async Task<List<Employee>> GetFilteredAsync(Expression<Func<Employee, bool>> predicate) =>
+    public async Task<List<Employee>> GetAllAsync(Expression<Func<Employee, bool>> predicate) =>
         await GetQueryableEmployee().Where(predicate).ToListAsync();
 
     public async Task<Employee?> GetByIdAsync(Guid? employeeId)

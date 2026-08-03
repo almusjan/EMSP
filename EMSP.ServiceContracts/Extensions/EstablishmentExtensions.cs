@@ -60,4 +60,20 @@ public static class EstablishmentExtensions
             Employees = establishment.Employees?.Select(e => e.ToEmployeeSummaryResponseObject()).ToList()
         };
     }
+    
+    // Only for unit test
+    public static EstablishmentUpdateRequest ToEstablishmentUpdateRequest(
+        this EstablishmentSummaryResponse establishmentSummaryResponse)
+    {
+        return new EstablishmentUpdateRequest()
+        {
+            Id = establishmentSummaryResponse.Id,
+            EstablishmentCode =  establishmentSummaryResponse.EstablishmentCode,
+            EstablishmentType = establishmentSummaryResponse.EstablishmentType,
+            NationalId = establishmentSummaryResponse.NationalId,
+            EstablishmentNameAr =  establishmentSummaryResponse.EstablishmentNameAr,
+            EstablishmentNameEn =  establishmentSummaryResponse.EstablishmentNameEn,
+            ShortAddress = establishmentSummaryResponse.ShortAddress
+        };
+    }
  }

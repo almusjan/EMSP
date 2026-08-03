@@ -1,4 +1,5 @@
-﻿using EMSP.Entities;
+﻿using System.Linq.Expressions;
+using EMSP.Entities;
 using EMSP.Entities.Models;
 using EMSP.RepositoryContracts.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,8 @@ public class CompanyRepository : ICompanyRepository
         _dbContext = dbContext;
     }
     
-    public async Task<List<Company>> GetAllAsync() => 
-        await _dbContext.Companies.ToListAsync();
+    public async Task<List<Company>> GetAllAsync(Expression<Func<Company, bool>> predicate) => 
+        await _dbContext.Companies.Where(predicate).ToListAsync();
 
     public async Task<Company?> GetByIdAsync(Guid companyId)
     {

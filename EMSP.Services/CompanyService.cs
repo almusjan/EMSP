@@ -18,9 +18,9 @@ public class CompanyService : ICompanyService
     
     public async Task<List<CompanySummaryResponse>> GetCompanies()
     {
-        List<Company> companies = await _companyRepository.GetAllAsync();
+        List<Company> companies = await _companyRepository.GetAllAsync(c => !c.IsDeleted);
 
-        return companies.Where(c => !c.IsDeleted).Select(c => c.ToCompanySummaryResponseObject()).ToList();
+        return companies.Select(c => c.ToCompanySummaryResponseObject()).ToList();
     }
 
     public async Task<CompanySummaryResponse> AddCompany(CompanyAddRequest? companyAddRequest)
@@ -43,12 +43,12 @@ public class CompanyService : ICompanyService
     public async Task<CompanyDetailedResponse?> GetCompanyById(Guid? companyId)
     {
         if (companyId == null)
-            return null;
+            throw new ArgumentNullException(nameof(companyId));
         
         Company? company = await _companyRepository.GetByIdAsync(companyId.Value);
 
         if (company == null || company.IsDeleted)
-            return null;
+            throw new KeyNotFoundException($"Company with ID {companyId} not found or soft-deleted");
         
         return company.ToCompanyDetailedResponseObject();
     }
@@ -91,10 +91,10 @@ public class CompanyService : ICompanyService
         Company? matchingCompany = await _companyRepository.GetByIdAsync(companyId);
 
         if (matchingCompany == null)
-            throw new  KeyNotFoundException($"Company with ID {companyId} not found!");
+            throw new  KeyNotFoundException($"The company with ID {companyId} not found!");
         
         if(matchingCompany.IsDeleted)
-            throw new InvalidOperationException("Company is already soft-deleted!");
+            throw new InvalidOperationException("The company is already soft-deleted!");
         
         matchingCompany.IsDeleted = true;
         

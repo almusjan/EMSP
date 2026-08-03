@@ -41,4 +41,17 @@ public static class SalaryExtensions
             TotalSalary = salary.TotalSalary
         };
     }
+    
+    // only for unit test
+    public static SalaryUpdateRequest ToSalaryUpdateRequest(this SalaryResponse salaryResponse)
+    {
+        return new SalaryUpdateRequest()
+        {
+            Id =  salaryResponse.Id,
+            BasicSalary = salaryResponse.BasicSalary,
+            HousingAllowance = salaryResponse.HousingAllowance,
+            OtherAllowance = salaryResponse.OtherAllowance,
+            TransportationAllowance = salaryResponse.TransportationAllowance
+        };
+    }
 }

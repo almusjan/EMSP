@@ -16,11 +16,8 @@ public class SalaryService : ISalaryService
         _salaryRepository = salaryRepository;
     }
     
-    public async Task<SalaryResponse> AddSalary(Guid? employeeId, SalaryAddRequest? salaryAddRequest)
+    public async Task<SalaryResponse> AddSalary(SalaryAddRequest? salaryAddRequest)
     {
-        if(employeeId == null)
-            throw new ArgumentNullException(nameof(employeeId));
-        
         if(salaryAddRequest == null)
             throw new ArgumentNullException(nameof(salaryAddRequest));
         
@@ -34,11 +31,8 @@ public class SalaryService : ISalaryService
         return salary.ToSalaryResponseObject();
     }
 
-    public async Task<SalaryResponse> UpdateSalary(Guid? employeeId, SalaryUpdateRequest? salaryUpdateRequest)
+    public async Task<SalaryResponse> UpdateSalary(SalaryUpdateRequest? salaryUpdateRequest)
     {
-        if (employeeId == null)
-            throw new ArgumentNullException(nameof(employeeId));
-
         if (salaryUpdateRequest == null)
             throw new ArgumentNullException(nameof(salaryUpdateRequest));
         
@@ -47,7 +41,7 @@ public class SalaryService : ISalaryService
         Salary? matchingSalary = await _salaryRepository.GetByIdAsync(salaryUpdateRequest.Id);
 
         if (matchingSalary == null)
-            throw new KeyNotFoundException("Employee's salary not found");
+            throw new KeyNotFoundException("The employee's salary not found");
 
         #region CheckingUpdateFields
         

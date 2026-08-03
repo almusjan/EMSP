@@ -1,4 +1,5 @@
-﻿using EMSP.Entities;
+﻿using System.Linq.Expressions;
+using EMSP.Entities;
 using EMSP.Entities.Models;
 using EMSP.RepositoryContracts.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,8 @@ public class HealthInsuranceRepository : IHealthInsuranceRepository
         return healthInsurance;
     }
 
-    public async Task<List<HealthInsurance>> GetAllAsync()
-    {
-        return await _dbContext.HealthInsurances.ToListAsync();
-    }
+    public async Task<List<HealthInsurance>> GetAllAsync(Expression<Func<HealthInsurance, bool>> predicate) => 
+        await _dbContext.HealthInsurances.Where(predicate).ToListAsync();
 
     public async Task<HealthInsurance?> GetByIdAsync(Guid? healthInsuranceId)
     {

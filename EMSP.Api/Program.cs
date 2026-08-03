@@ -36,10 +36,10 @@ app.UseStaticFiles();
 app.MapControllers();
 
 // auto insert banks and countries from first launch!
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//     DbSeeder.Seed(dbContext);
-// }
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbSeeder.Seed(dbContext);
+}
 
 app.Run();

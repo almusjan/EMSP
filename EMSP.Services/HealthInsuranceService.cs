@@ -18,9 +18,9 @@ public class HealthInsuranceService : IHealthInsuranceService
     
     public async Task<List<HealthInsuranceSummaryResponse>> GetHealthInsurances()
     {
-        List<HealthInsurance> healthInsurances = await _healthInsuranceRepository.GetAllAsync();
+        List<HealthInsurance> healthInsurances = await _healthInsuranceRepository.GetAllAsync(hi => !hi.IsDeleted);
         
-        return healthInsurances.Where(hi => !hi.IsDeleted).Select(hi => hi.ToHealthInsuranceSummaryResponseObject()).ToList();
+        return healthInsurances.Select(hi => hi.ToHealthInsuranceSummaryResponseObject()).ToList();
     }
 
     public async Task<HealthInsuranceSummaryResponse> AddHealthInsurance(
@@ -41,13 +41,13 @@ public class HealthInsuranceService : IHealthInsuranceService
 
     public async Task<HealthInsuranceDetailedResponse?> GetHealthInsuranceById(Guid? healthInsuranceId)
     {
-        if(healthInsuranceId == null)
-            return null;
+        if (healthInsuranceId == null)
+            throw new ArgumentNullException(nameof(healthInsuranceId));
         
         HealthInsurance? healthInsurance = await _healthInsuranceRepository.GetByIdAsync(healthInsuranceId.Value);
         
         if(healthInsurance == null)
-            return null;
+            throw new  KeyNotFoundException($"The healthInsurance with ID {healthInsuranceId} not found or soft-deleted");
         
         return healthInsurance.ToHealthInsuranceDetailedResponseObject();
     }
@@ -63,7 +63,7 @@ public class HealthInsuranceService : IHealthInsuranceService
         HealthInsurance? matchingHealthInsurance = await _healthInsuranceRepository.GetByIdAsync(healthInsuranceUpdateRequest.Id);
         
         if(matchingHealthInsurance == null)
-            throw new KeyNotFoundException("HealthInsurance not found");
+            throw new KeyNotFoundException($"The healthInsurance with ID {healthInsuranceUpdateRequest.Id} not found");
 
         #region CheckingUpdateFields
 
@@ -84,10 +84,10 @@ public class HealthInsuranceService : IHealthInsuranceService
         HealthInsurance? healthInsurance = await _healthInsuranceRepository.GetByIdAsync(healthInsuranceId);
         
         if(healthInsurance == null)
-            throw new KeyNotFoundException("HealthInsurance not found");
+            throw new KeyNotFoundException($"The healthInsurance with ID {healthInsuranceId} not found");
         
         if(healthInsurance.IsDeleted)
-            throw new InvalidOperationException("HealthInsurance already soft deleted");
+            throw new InvalidOperationException("The healthInsurance is already soft deleted");
         
         healthInsurance.IsDeleted = true;
         

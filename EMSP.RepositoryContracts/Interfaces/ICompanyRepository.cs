@@ -1,10 +1,11 @@
-﻿using EMSP.Entities.Models;
+﻿using System.Linq.Expressions;
+using EMSP.Entities.Models;
 
 namespace EMSP.RepositoryContracts.Interfaces;
 
 public interface ICompanyRepository
 {
-    Task<List<Company>> GetAllAsync();
+    Task<List<Company>> GetAllAsync(Expression<Func<Company, bool>> predicate);
     
     Task<Company?> GetByIdAsync(Guid companyId);
     

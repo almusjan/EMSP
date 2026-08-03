@@ -18,9 +18,9 @@ public class EstablishmentService : IEstablishmentService
     
     public async Task<List<EstablishmentSummaryResponse>> GetEstablishments()
     {
-        List<Establishment> establishments = await _establishmentRepository.GetAllAsync();
+        List<Establishment> establishments = await _establishmentRepository.GetAllAsync(e => !e.IsDeleted);
 
-        return establishments.Where(e => !e.IsDeleted).Select(e => e.ToEstablishmentSummaryResponseObject()).ToList();
+        return establishments.Select(e => e.ToEstablishmentSummaryResponseObject()).ToList();
     }
 
     public async Task<EstablishmentSummaryResponse> AddEstablishment(EstablishmentAddRequest? establishmentAddRequest)
@@ -41,12 +41,12 @@ public class EstablishmentService : IEstablishmentService
     public async Task<EstablishmentDetailedResponse?> GetEstablishmentById(Guid? establishmentId)
     {
         if (establishmentId == null)
-            return null;
+            throw new ArgumentNullException(nameof(establishmentId));
         
         Establishment?  establishment = await _establishmentRepository.GetByIdAsync(establishmentId.Value);
 
         if (establishment == null || establishment.IsDeleted)
-            return null;
+            throw new KeyNotFoundException($"The establishment with ID {establishmentId}  not found or soft-deleted");
         
         return establishment.ToEstablishmentDetailedResponseObject();
     }
@@ -62,7 +62,7 @@ public class EstablishmentService : IEstablishmentService
         Establishment? matchingEstablishment =  await _establishmentRepository.GetByIdAsync(establishmentUpdateRequest.Id);
         
         if (matchingEstablishment == null)
-            throw new KeyNotFoundException("Establishment not found");
+            throw new KeyNotFoundException($"The establishment with ID {establishmentUpdateRequest.Id}  not found");
 
         #region CheckingUpdateFields
 
@@ -88,10 +88,10 @@ public class EstablishmentService : IEstablishmentService
         Establishment? establishment = await _establishmentRepository.GetByIdAsync(establishmentId);
         
         if (establishment == null)
-            throw new KeyNotFoundException("Establishment not found");
+            throw new KeyNotFoundException($"The establishment with ID {establishmentId}  not found");
         
         if(establishment.IsDeleted)
-            throw new InvalidOperationException("Establishment already soft-deleted");
+            throw new InvalidOperationException("The establishment is already soft-deleted");
         
         establishment.IsDeleted = true;
         

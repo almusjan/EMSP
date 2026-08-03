@@ -61,4 +61,19 @@ public static class CompanyExtensions
             Employees = company.Employees?.Select(e => e.ToEmployeeSummaryResponseObject()).ToList()
         };
     }
+    
+    // For unit test only
+    public static CompanyUpdateRequest ToCompanyUpdateRequestObject(this CompanySummaryResponse companySummaryResponse)
+    {
+        return new CompanyUpdateRequest()
+        {
+            Id =  companySummaryResponse.Id,
+            CompanyNameAr = companySummaryResponse.CompanyNameAr,
+            CompanyNameEn = companySummaryResponse.CompanyNameEn,
+            CompanyCode = companySummaryResponse.CompanyCode,
+            ShortAddress = companySummaryResponse.ShortAddress,
+            ContactNumber = companySummaryResponse.ContactNumber,
+            Email = companySummaryResponse.Email,
+        };
+    }
 }

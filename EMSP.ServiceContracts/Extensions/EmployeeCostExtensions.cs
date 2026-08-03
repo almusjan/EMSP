@@ -38,4 +38,20 @@ public static class EmployeeCostExtensions
             ReferenceNumber = employeeCost.ReferenceNumber
         };
     }
+    
+    // for unit test only
+    public static EmployeeCostUpdateRequest ToEmployeeCostUpdateRequest(this EmployeeCostResponse employeeCostResponse)
+    {
+        return new EmployeeCostUpdateRequest()
+        {
+            Id = employeeCostResponse.Id,
+            CostAmount = employeeCostResponse.CostAmount,
+            CostType = employeeCostResponse.CostType,
+            Description = employeeCostResponse.Description,
+            DueDate = employeeCostResponse.DueDate,
+            IsPaid =  employeeCostResponse.IsPaid,
+            PaidDate = employeeCostResponse.PaidDate,
+            ReferenceNumber = employeeCostResponse.ReferenceNumber
+        };
+    }
 }

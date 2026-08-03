@@ -1,4 +1,5 @@
-﻿using EMSP.Entities;
+﻿using System.Linq.Expressions;
+using EMSP.Entities;
 using EMSP.Entities.Models;
 using EMSP.RepositoryContracts.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,8 @@ public class EstablishmentRepository : IEstablishmentRepository
         return establishment;
     }
 
-    public async Task<List<Establishment>> GetAllAsync()
-    {
-        return await _dbContext.Establishments.ToListAsync();
-    }
+    public async Task<List<Establishment>> GetAllAsync(Expression<Func<Establishment, bool>> predicate) => 
+        await _dbContext.Establishments.Where(predicate).ToListAsync();
 
     public async Task<Establishment?> GetByIdAsync(Guid? establishmentId)
     {

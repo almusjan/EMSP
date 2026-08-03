@@ -6,9 +6,8 @@ namespace EMSP.RepositoryContracts.Interfaces;
 
 public interface IEmployeeRepository
 {
-    Task<List<Employee>> GetAllAsync();
     
-    Task<List<Employee>> GetFilteredAsync(Expression<Func<Employee, bool>>  predicate);
+    Task<List<Employee>> GetAllAsync(Expression<Func<Employee, bool>> predicate);
     
     Task<Employee?> GetByIdAsync(Guid? employeeId);
     

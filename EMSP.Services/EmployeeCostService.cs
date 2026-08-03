@@ -33,13 +33,13 @@ public class EmployeeCostService : IEmployeeCostService
 
     public async Task<EmployeeCostResponse?> GetEmployeeCostById(Guid? employeeCostId)
     {
-        if(employeeCostId == null)
-            return null;
+        if (employeeCostId == null)
+            throw new ArgumentNullException(nameof(employeeCostId));
         
         EmployeeCost?  employeeCost = await _employeeCostRepository.GetByIdAsync(employeeCostId);
-        
-        if(employeeCost == null || employeeCost.IsDeleted)
-            return null;
+
+        if (employeeCost == null || employeeCost.IsDeleted)
+            throw new KeyNotFoundException($"The employee cost with ID {employeeCostId} not found or soft-deleted");
         
         return employeeCost.ToEmployeeCostResponseObject();
     }
@@ -54,7 +54,7 @@ public class EmployeeCostService : IEmployeeCostService
         EmployeeCost? matchingEmployeeCost = await  _employeeCostRepository.GetByIdAsync(employeeCostUpdateRequest.Id);
         
         if (matchingEmployeeCost == null)
-            throw new KeyNotFoundException($"Employee Cost with ID {employeeCostUpdateRequest.Id} not found");
+            throw new KeyNotFoundException($"The employee cost with ID {employeeCostUpdateRequest.Id} not found");
 
         #region CheckingUpdateFields
 
@@ -80,10 +80,10 @@ public class EmployeeCostService : IEmployeeCostService
         EmployeeCost? employeeCost = await _employeeCostRepository.GetByIdAsync(employeeCostId);
         
         if(employeeCost == null)
-            throw new KeyNotFoundException($"Employee Cost with ID {employeeCostId} not found");
+            throw new KeyNotFoundException($"The employee cost with ID {employeeCostId} not found");
         
         if(employeeCost.IsDeleted)
-            throw new InvalidOperationException("Employee Cost is already soft-deleted");
+            throw new InvalidOperationException("The employee cost is already soft-deleted");
         
         employeeCost.IsDeleted = true;
         await _employeeCostRepository.UpdateAsync(employeeCost);

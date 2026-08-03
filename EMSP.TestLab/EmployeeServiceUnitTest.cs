@@ -41,7 +41,7 @@ public class EmployeeServiceUnitTest
         // Arrange
         List<Employee> employees = new List<Employee>();
         
-        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync())
+        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
             .ReturnsAsync(employees);
         
         // Act
@@ -89,7 +89,7 @@ public class EmployeeServiceUnitTest
         }
         
         // Act
-        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync())
+        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
             .ReturnsAsync(employees);
         
         List<EmployeeSummaryResponse>? actualEmployeeResponses = await _employeeService.GetEmployees(EmployeeStatus.Active);
@@ -139,7 +139,7 @@ public class EmployeeServiceUnitTest
         }
         
         // Act
-        _mockEmployeeRepository.Setup(temp => temp.GetFilteredAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
+        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
             .ReturnsAsync(employees);
         
         List<EmployeeSummaryResponse>? actualEmployeeResponses =
@@ -186,7 +186,7 @@ public class EmployeeServiceUnitTest
         }
         
         // Act
-        _mockEmployeeRepository.Setup(temp => temp.GetFilteredAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
+        _mockEmployeeRepository.Setup(temp => temp.GetAllAsync(It.IsAny<Expression<Func<Employee, bool>>>()))
             .ReturnsAsync(employees);
         
         List<EmployeeSummaryResponse>? actualEmployeeResponses =
@@ -287,16 +287,39 @@ public class EmployeeServiceUnitTest
     #region GetEmployeeById
 
     [Fact]
-    public async Task GetEmployeeId_NullEmployee_ShouldBeNull()
+    public async Task GetEmployeeById_NullEmployeeId_ThrowsArgumentNullException()
     {
         // Arrange
         Guid? id =  null;
         
         // Act
-        EmployeeDetailedResponse? response = await _employeeService.GetEmployeeById(id);
+        Func<Task> action = async () => await _employeeService.GetEmployeeById(id);
         
         // Assert
-        response.Should().BeNull();
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+    
+    [Fact]
+    public async Task GetEmployeeById_NullEmployeeOrSoftDeleted_ThrowsKeyNotFoundException()
+    {
+        // Arrange
+        Employee employee = _fixture.Build<Employee>().With(e => e.Country, null as Country)
+            .With(e => e.IsDeleted, true)
+            .With(e => e.Establishment, null as Establishment)
+            .With(e => e.Company, null as Company).With(e => e.Salary, null as Salary)
+            .With(e => e.Bank, null as Bank).With(e => e.HealthInsurance, null as HealthInsurance)
+            .With(e => e.EmployeeCosts, null as List<EmployeeCost>)
+            .Create();
+
+        // Act
+        _mockEmployeeRepository.Setup(temp => temp.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(null as Employee);
+        
+        // Act
+        Func<Task> action = async () => await _employeeService.GetEmployeeById(employee.Id);
+        
+        // Assert
+        await action.Should().ThrowAsync<KeyNotFoundException>();
     }
 
     [Fact]
@@ -304,6 +327,7 @@ public class EmployeeServiceUnitTest
     {
         // Arrange
         Employee employee = _fixture.Build<Employee>().With(e => e.Country, null as Country)
+            .With(e => e.IsDeleted, false)
             .With(e => e.Establishment, null as Establishment)
             .With(e => e.Company, null as Company).With(e => e.Salary, null as Salary)
             .With(e => e.Bank, null as Bank).With(e => e.HealthInsurance, null as HealthInsurance)

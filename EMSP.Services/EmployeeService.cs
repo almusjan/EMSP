@@ -1,4 +1,5 @@
-﻿using EMSP.Entities.Enums;
+﻿using System.Linq.Expressions;
+using EMSP.Entities.Enums;
 using EMSP.Entities.Models;
 using EMSP.RepositoryContracts.Interfaces;
 using EMSP.ServiceContracts.DTOs.EmployeeDTOs;
@@ -19,24 +20,24 @@ public class EmployeeService : IEmployeeService
     
     public async Task<List<EmployeeSummaryResponse>> GetEmployees(EmployeeStatus? status = null)
     {
-        List<Employee> employees = await _employeeRepository.GetAllAsync();
-
-        if (status.HasValue)
-            employees = employees.Where(e => e.Status == status).ToList();
-
-        return employees.Where(e => !e.IsDeleted).Select(e => e.ToEmployeeSummaryResponseObject()).ToList();
+        Expression<Func<Employee, bool>> predicate =
+            status.HasValue ? e => !e.IsDeleted && e.Status == status : e => !e.IsDeleted;
+        
+        List<Employee> employees = await _employeeRepository.GetAllAsync(predicate);
+        
+        return employees.Select(e => e.ToEmployeeSummaryResponseObject()).ToList();
     }
 
     public async Task<List<EmployeeSummaryResponse>> GetFilteredEmployees(string filterBy, string searchString)
     {
         List<Employee> employees = (filterBy) switch
         {
-            (nameof(Employee.IqamaOrIdNumber)) => await _employeeRepository.GetFilteredAsync(e => e.IqamaOrIdNumber != null && e.IqamaOrIdNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase)) ,
-            (nameof(Employee.EmailAddress)) => await _employeeRepository.GetFilteredAsync(e => e.EmailAddress != null && e.EmailAddress.Contains(searchString, StringComparison.OrdinalIgnoreCase)) ,
-            _ => await _employeeRepository.GetAllAsync()
+            (nameof(Employee.IqamaOrIdNumber)) => await _employeeRepository.GetAllAsync(e => !e.IsDeleted && e.IqamaOrIdNumber != null && e.IqamaOrIdNumber.Contains(searchString, StringComparison.OrdinalIgnoreCase)) ,
+            (nameof(Employee.EmailAddress)) => await _employeeRepository.GetAllAsync(e => !e.IsDeleted && e.EmailAddress != null && e.EmailAddress.Contains(searchString, StringComparison.OrdinalIgnoreCase)) ,
+            _ => await _employeeRepository.GetAllAsync(e => !e.IsDeleted)
         };
         
-        return employees.Where(e => !e.IsDeleted).Select(e => e.ToEmployeeSummaryResponseObject()).ToList();
+        return employees.Select(e => e.ToEmployeeSummaryResponseObject()).ToList();
     }
 
     public async Task<EmployeeSummaryResponse> AddEmployee(EmployeeAddRequest? employeeAddRequest)
@@ -47,7 +48,7 @@ public class EmployeeService : IEmployeeService
         ValidationHelper.ModelValidation(employeeAddRequest);
 
         if (employeeAddRequest.IqamaOrIdNumber != null && await _employeeRepository.IsIqamaExistsAsync(employeeAddRequest.IqamaOrIdNumber))
-            throw new InvalidOperationException($"Employee with Iqama {employeeAddRequest.IqamaOrIdNumber} already exists");
+            throw new InvalidOperationException($"The employee with Iqama {employeeAddRequest.IqamaOrIdNumber} already exists");
         
         Employee employee = employeeAddRequest.ToEmployeeObject();
 
@@ -61,13 +62,13 @@ public class EmployeeService : IEmployeeService
     public async Task<EmployeeDetailedResponse?> GetEmployeeById(Guid? employeeId)
     {
         if (employeeId == null)
-            return null;
+            throw new ArgumentNullException(nameof(employeeId));
         
         Employee? employee = await _employeeRepository.GetByIdAsync(employeeId.Value);
 
         // hide soft deleted (for now at least)
         if (employee == null || employee.IsDeleted)
-            return null;
+            throw new KeyNotFoundException($"The employee with ID {employeeId} not found or soft-deleted");
         
         return employee.ToEmployeeDetailedResponseObject();
     }
@@ -82,7 +83,7 @@ public class EmployeeService : IEmployeeService
         Employee? matchingEmployee = await _employeeRepository.GetByIdAsync(employeeUpdateRequest.Id);
         
         if(matchingEmployee == null)
-            throw new KeyNotFoundException($"Employee with ID {employeeUpdateRequest.Id} not found");
+            throw new KeyNotFoundException($"The employee with ID {employeeUpdateRequest.Id} not found");
 
         #region CheckingUpdateFields
         
@@ -134,7 +135,7 @@ public class EmployeeService : IEmployeeService
 
         // not sure
         if (matchingEmployee == null)
-            throw new KeyNotFoundException($"Employee with ID {employeeId} not found");
+            throw new KeyNotFoundException($"The employee with ID {employeeId} not found");
 
         if (matchingEmployee.IsDeleted)
             throw new InvalidOperationException("The employee is already soft-deleted");

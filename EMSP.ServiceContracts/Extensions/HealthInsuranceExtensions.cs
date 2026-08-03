@@ -53,4 +53,16 @@ public static class HealthInsuranceExtensions
             Employees = healthInsurance.Employees?.Select(e => e.ToEmployeeSummaryResponseObject()).ToList()
         };
     }
+    // only for unit test
+    public static HealthInsuranceUpdateRequest ToHealthInsuranceUpdateRequestObject(
+        this HealthInsuranceSummaryResponse healthInsuranceSummaryResponse)
+    {
+        return new HealthInsuranceUpdateRequest()
+        {
+            Id =  healthInsuranceSummaryResponse.Id,
+            PolicyNumber = healthInsuranceSummaryResponse.PolicyNumber,
+            InsuranceProvider = healthInsuranceSummaryResponse.InsuranceProvider,
+            PolicyExpiryDate = healthInsuranceSummaryResponse.PolicyExpiryDate
+        };
+    }
 }
