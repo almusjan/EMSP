@@ -16,8 +16,11 @@ public class SalaryService : ISalaryService
         _salaryRepository = salaryRepository;
     }
     
-    public async Task<SalaryResponse> AddSalary(SalaryAddRequest? salaryAddRequest)
+    public async Task<SalaryResponse> AddSalary(Guid? employeeId, SalaryAddRequest? salaryAddRequest)
     {
+        if(employeeId == null)
+            throw new ArgumentNullException(nameof(employeeId));
+        
         if(salaryAddRequest == null)
             throw new ArgumentNullException(nameof(salaryAddRequest));
         
@@ -26,7 +29,7 @@ public class SalaryService : ISalaryService
         Salary salary = salaryAddRequest.ToSalaryObject();
         salary.Id =  Guid.NewGuid();
         
-        await _salaryRepository.AddAsync(salary);
+        await _salaryRepository.AddAsync(employeeId, salary);
 
         return salary.ToSalaryResponseObject();
     }

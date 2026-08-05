@@ -6,7 +6,7 @@ namespace EMSP.ServiceContracts.Interfaces;
 public interface ISalaryService
 {
     
-    Task<SalaryResponse> AddSalary(SalaryAddRequest? salaryAddRequest);
+    Task<SalaryResponse> AddSalary(Guid? employeeId, SalaryAddRequest? salaryAddRequest);
     
      Task<SalaryResponse> UpdateSalary(SalaryUpdateRequest? salaryUpdateRequest);
     

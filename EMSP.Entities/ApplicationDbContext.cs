@@ -52,9 +52,9 @@ public class ApplicationDbContext(DbContextOptions options) : DbContext(options)
         // conversion - end
         
         // model relationships
-        modelBuilder.Entity<Employee>().HasOne(e => e.Salary)
-            .WithOne().HasForeignKey<Employee>( e=> e.SalaryId)
-            .OnDelete(DeleteBehavior.SetNull);
+        modelBuilder.Entity<Salary>().HasOne<Employee>()
+            .WithOne(e => e.Salary).HasForeignKey<Salary>( e=> e.EmployeeId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Employee>().HasOne(e => e.Country)
             .WithMany(c => c.Residents).HasForeignKey(e => e.CountryId)

@@ -4,7 +4,7 @@ namespace EMSP.RepositoryContracts.Interfaces;
 
 public interface ISalaryRepository
 {
-    Task<Salary> AddAsync(Salary salary);
+    Task<Salary> AddAsync(Guid? employeeId, Salary salary);
     
     Task<Salary?> GetByIdAsync(Guid? salaryId);
     

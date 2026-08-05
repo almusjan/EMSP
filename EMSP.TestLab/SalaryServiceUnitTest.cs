@@ -32,11 +32,23 @@ public class SalaryServiceUnitTest
     #region AddSalary
 
     [Fact]
+    public async Task AddSalary_NullEmployeeId_ThrowsArgumentNullException()
+    {
+        SalaryAddRequest?  salaryAddRequest = null;
+        Guid? employeeId = null;
+        
+        Func<Task> action = async () => await _salaryService.AddSalary(employeeId, salaryAddRequest);
+        
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
     public async Task AddSalary_NullAddRequest_ThrowsArgumentNullException()
     {
         SalaryAddRequest?  salaryAddRequest = null;
-
-        Func<Task> action = async () => await _salaryService.AddSalary(salaryAddRequest);
+        Guid employeeId = Guid.NewGuid();
+        
+        Func<Task> action = async () => await _salaryService.AddSalary(employeeId, salaryAddRequest);
         
         await action.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -45,16 +57,17 @@ public class SalaryServiceUnitTest
     public async Task AddSalary_ValidAddRequest_ToBeSuccess()
     {
         SalaryAddRequest salaryAddRequest = _fixture.Create<SalaryAddRequest>();
+        Guid employeeId = Guid.NewGuid();
 
         Salary salary = salaryAddRequest.ToSalaryObject();
 
         SalaryResponse expectedResponse = salary.ToSalaryResponseObject();
  
-        _mockSalaryRepository.Setup(temp => temp.AddAsync(It.IsAny<Salary>()))
+        _mockSalaryRepository.Setup(temp => temp.AddAsync(It.IsAny<Guid>(), It.IsAny<Salary>()))
             .ReturnsAsync(salary);
 
         SalaryResponse actualResponse =
-            await _salaryService.AddSalary(salaryAddRequest);
+            await _salaryService.AddSalary(employeeId, salaryAddRequest);
         expectedResponse.Id = actualResponse.Id;
 
         actualResponse.Id.Should().NotBe(Guid.Empty);

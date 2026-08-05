@@ -13,12 +13,16 @@ public class SalaryRepository : ISalaryRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Salary> AddAsync(Salary salary)
+    public async Task<Salary> AddAsync(Guid? employeeId, Salary salary)
     {
+        if(employeeId.HasValue)
+            salary.EmployeeId = employeeId;
+        
         salary.CreatedAt =  DateTime.UtcNow;
         salary.UpdatedAt = DateTime.UtcNow;
         
         await  _dbContext.Salaries.AddAsync(salary);
+        
         await _dbContext.SaveChangesAsync();
         
         return salary;

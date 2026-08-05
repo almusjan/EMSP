@@ -77,8 +77,6 @@ public class Employee : BaseEntity
     [ForeignKey(nameof(BankId))]
     public virtual Bank?  Bank {get; set;}
     
-    public Guid? SalaryId {get; set;}
-    [ForeignKey(nameof(SalaryId))]
     public virtual Salary?  Salary {get; set;}
 
     #endregion

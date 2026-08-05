@@ -11,4 +11,6 @@ public class Salary : BaseEntity
     
     // Calculate in business logic
     public decimal TotalSalary {get; set;}
+    
+    public Guid?  EmployeeId {get; set;}
 }
